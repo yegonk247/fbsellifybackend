@@ -1,6 +1,6 @@
 // create_keys_script.js
 
-require('dotenv').config();
+// require('dotenv').config();
 const { initializeDatabase, getConnection } = require('./databaseconnection.js');
 const { createLicenseKeys } = require('./utilities/licenseKeyAdmin.js'); 
 

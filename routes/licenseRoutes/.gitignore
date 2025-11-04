@@ -1,0 +1,19 @@
+# Dependencies
+/node_modules
+/package-lock.json
+
+# Environment Variables and Secrets
+.env
+.DS_Store # Mac operating system files
+
+# Build Artifacts
+/dist
+/build
+/coverage
+
+# Logs and Crash Reports
+*.log
+npm-debug.log*
+
+# Editor/OS Specific Files
+.vscode/
