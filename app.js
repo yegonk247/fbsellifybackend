@@ -50,6 +50,6 @@ app.use(express.json());
 
 // --- START THE SERVER ---
 app.listen(PORT, () => {
-    console.log(`✅ Server running on http://localhost:${PORT}`);
+    console.log(`✅ Server running on Host this port=:${PORT}`);
     console.log(`Allowed CORS origin: ${process.env.ALLOWED_ORIGIN}`);
 });
