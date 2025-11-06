@@ -1,0 +1,11 @@
+# Dependencies
+# -------------------------
+# Ignore the local Node.js dependencies folder
+/node_modules
+
+# Environment Variables and Secrets
+# -------------------------
+# Ignore all .env files that contain sensitive data or paths.
+# This prevents credentials and local configurations from being committed.
+.env
+.env.railway

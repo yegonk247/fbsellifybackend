@@ -14,6 +14,7 @@ const dbConfig = {
     port: process.env.DB_PORT || 3306 //
 };
 
+
 // SQL to create the license_keys table if it doesn't exist
 const CREATE_LICENSES_TABLE_SQL = `
     CREATE TABLE IF NOT EXISTS \`license_keys\` (

@@ -1,6 +1,12 @@
 // create_keys_script.js
 
 // require('dotenv').config();
+
+
+// TO THIS (if you name the file .env.railway):
+require('dotenv').config({ path: './.env.railway' });
+
+
 const { initializeDatabase, getConnection } = require('./databaseconnection.js');
 const { createLicenseKeys } = require('./utilities/licenseKeyAdmin.js'); 
 
