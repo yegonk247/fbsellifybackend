@@ -7,7 +7,7 @@
 require('dotenv').config({ path: './.env.railway' });
 
 
-const { initializeDatabase, getConnection } = require('./databaseconnection.js');
+const { initializeDatabase, getPool } = require('./databaseconnection.js');
 const { createLicenseKeys } = require('./utilities/licenseKeyAdmin.js'); 
 
 const NUMBER_OF_KEYS_TO_GENERATE = 20;
@@ -18,7 +18,7 @@ const NUMBER_OF_KEYS_TO_GENERATE = 20;
         await initializeDatabase(); 
         
         // 2. Get the connection object
-        const db = getConnection(); 
+        const db = getPool(); 
         
         // 3. Generate and insert the keys
         console.log(`Attempting to generate and insert ${NUMBER_OF_KEYS_TO_GENERATE} keys...`);

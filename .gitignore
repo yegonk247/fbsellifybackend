@@ -9,3 +9,4 @@
 # This prevents credentials and local configurations from being committed.
 .env
 .env.railway
+package-lock.json
