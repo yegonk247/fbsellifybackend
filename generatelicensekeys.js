@@ -10,7 +10,7 @@ require('dotenv').config({ path: './.env.railway' });
 const { initializeDatabase, getPool } = require('./databaseconnection.js');
 const { createLicenseKeys } = require('./utilities/licenseKeyAdmin.js'); 
 
-const NUMBER_OF_KEYS_TO_GENERATE = 20;
+const NUMBER_OF_KEYS_TO_GENERATE = 7;
 
 (async () => {
     try {
