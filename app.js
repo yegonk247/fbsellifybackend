@@ -14,7 +14,11 @@ const PORT = process.env.PORT || 3000;
 const cors = require('cors');
 
 const { initializeDatabase } = require('./databaseconnection.js'); 
-const { getConnection } =require ("./databaseconnection.js")
+const { getPool } = require("./databaseconnection.js"); // <-- Import the Pool getter
+
+
+
+
 // const {generateLicenseKey} =require("./generatelicensekeys.js");
 const licenseRouter = require('./routes/licenseRoutes/validatelicensekey.js');
 // const { createLicenseKeys } = require('./utilities/licenseKeyAdmin.js');
@@ -61,21 +65,25 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 
-
+// ... middleware ...
+// ... CORS configuration ...
 (async ()=>{
     try{
         await initializeDatabase();
-        const db=await getConnection();
-        app.use('/api/licensekey', licenseRouter(db)); // <-- This defines the API endpoint!
-        // await generateLicenseKey();
-        // console.log(db);
+        
+        // 1. Get the Pool object (not a single connection)
+        const pool = getPool(); 
+        
+        // 2. Pass the Pool object to your router
+        app.use('/api/licensekey', licenseRouter(pool)); // <-- Pass the POOL!
         
     }
     catch(err){
         console.log(err);
     }
-    
 })()
+
+// ... server start ...
 
 
 // --- START THE SERVER ---

@@ -1,9 +1,11 @@
 // db-connection.js
 
-const mysql = require('mysql2/promise');
+const mysql = require('mysql2/promise'); // Using promise API
 
-// Declare connection variable globally within this module
-let connection; 
+
+let pool; // Declare a pool variable
+
+
 
 // --- DATABASE CONFIGURATION ---
 const dbConfig = {
@@ -11,7 +13,11 @@ const dbConfig = {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    port: process.env.DB_PORT || 3306 //
+    port: process.env.DB_PORT || 3306, //
+
+    waitForConnections: true,
+    connectionLimit: 100, // Define max connections
+    queueLimit: 0  
 };
 
 
@@ -34,39 +40,44 @@ const CREATE_LICENSES_TABLE_SQL = `
  // Establishes MySQL connection and runs initial schema setup.
 //   @returns {Promise<object>} The active MySQL connection object.
  
+    const initializeDatabase = async () => {
+        try{
+            // 1. Create the Pool object
+            pool = mysql.createPool(dbConfig);
+            console.log("✅ Database Pool Initialized");
+            // You can test the connection here if you like, but it's optional for a Pool
+            const connection = await pool.getConnection();
+            // conn.release();
+            await connection.execute(CREATE_LICENSES_TABLE_SQL);
+            console.log("✅ 'license_keys' table checked/created successfully.");
+            
+            // 4. RELEASE THE CONNECTION BACK TO THE POOL
+            connection.release(); 
+            
+            // 5. Return the Pool (the object that manages connections)
+            return pool;
+
+        }
+        catch(err){
+             console.error("❌ Database Initialization FAILED:", err);
+            // Exit process if DB is critical
+            process.exit(1);
+        }
+    };
+
+    // 2. Export the getter for the Pool
+    const getPool = () => {
+        if (!pool) {
+            console.error("❌ Database Initialization FAILED for create Pool connection:", error);
+            throw new Error("Database Pool has not been initialized!");
+            // process.exit(1);
+        }
+        return pool;
+    };
 
 
-async function initializeDatabase() {
-    try {
-        // 1. Establish database connection
-        connection = await mysql.createConnection(dbConfig);
-        console.log("Database connection established.");
-        
-        // 2. Run Database Migration/Setup
-        await connection.execute(CREATE_LICENSES_TABLE_SQL);
-        console.log("✅ 'license_keys' table checked/created successfully.");
-
-        return connection; 
-
-    } catch (error) {
-        console.error("❌ Database Initialization FAILED:", error);
-        // Exit process if DB is critical
-        process.exit(1);
-    }
-}
-
-/**
- * Helper function to get the active connection object.
- * Returns the connection only after initializeDatabase() has completed.
- */
-function getConnection() {
-    if (!connection) {
-        throw new Error("Database connection not yet established or failed.");
-    }
-    return connection;
-}
 
 module.exports = {
     initializeDatabase,
-    getConnection
+    getPool
 };
